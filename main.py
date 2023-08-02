@@ -1,5 +1,9 @@
 import openai
-import random
+import json
+from fpdf import FPDF
+import time
+
+openai.api_key = "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"
 
 names = [
     "Abigail Smith", "Benjamin Brown", "Christopher Jones", "David Williams", "Emily Anderson",
@@ -26,37 +30,58 @@ names = [
 ]
 
 def generate_resume():
-    for name in names[:2]:
-        rand_phone = openai.Completion.create(model = "text-davinci-003", prompt="Generate a random phone number of any country:", max_tokens=15)
-        rand_email = openai.Completion.create(model = "text-davinci-003", prompt=f"Generate a random email address with the name {name} :", max_tokens=15)
-        rand_loc = openai.Completion.create(model = "text-davinci-003", prompt="Generate a random address of any country:", max_tokens=15)
-        rand_sum =openai.Completion.create(model = "text-davinci-003", prompt="Generate a work summary for the job post of an Electrical Engineer", max_tokens=256)
-        rand_education =openai.Completion.create(model = "text-davinci-003", prompt="Generate an education background for the job post of an Electrical Engineer", max_tokens=256)
-        rand_skills = openai.Completion.create(model = "text-davinci-003", prompt="Generate a random skill set for the job post of an electrical engineer", max_tokens=128)
-        rand_achieve = openai.Completion.create(model = "text-davinci-003", prompt="Generate random achievements of competition or events", max_tokens=256)
-        rand_work_exp = openai.Completion.create(model = "text-davinci-003", prompt="Generate a random work experience related to electrical engineering", max_tokens=256)
-        rand_proj =openai.Completion.create(model = "text-davinci-003", prompt="Generate random projects idea list with a small description of 50 words or less for electrical engineer background", max_tokens=256)
+    for name in names[:1]:
+        rand_phone = openai.Completion.create(model = "text-davinci-002", prompt="Generate a random phone number of any country:", max_tokens=15)
+        time.sleep(20)
+        rand_email = openai.Completion.create(model = "text-davinci-002", prompt=f"Generate a random email address with the name {name} :", max_tokens=15)
+        time.sleep(20)
+        rand_loc = openai.Completion.create(model = "text-davinci-002", prompt="Generate a random address of any country:", max_tokens=15)
+        time.sleep(20)
+        rand_sum =openai.Completion.create(model = "text-davinci-002", prompt="Generate a work summary for the job post of an Electrical Engineer", max_tokens=256)
+        time.sleep(20)
+        rand_education =openai.Completion.create(model = "text-davinci-002", prompt="Generate an education background for the job post of an Electrical Engineer", max_tokens=256)
+        time.sleep(20)
+        rand_skills = openai.Completion.create(model = "text-davinci-002", prompt="Generate a random skill set for the job post of an electrical engineer", max_tokens=128)
+        time.sleep(20)
+        rand_achieve = openai.Completion.create(model = "text-davinci-002", prompt="Generate random achievements of competition or events", max_tokens=256)
+        time.sleep(20)
+        rand_work_exp = openai.Completion.create(model = "text-davinci-002", prompt="Generate a random work experience related to electrical engineering", max_tokens=256)
+        time.sleep(20)
+        rand_proj =openai.Completion.create(model = "text-davinci-002", prompt="Generate random projects idea list with a small description of 50 words or less for electrical engineer background", max_tokens=256)
 
         resume_content = f"""
-        {name}
-        Contact: {rand_phone} | {rand_email}
-        Location: {rand_loc}
+        {name["choices"][0]['message']}
+        Contact: {rand_phone["choices"][0]['message']} | {rand_email["choices"][0]['message']}
+        Location: {rand_loc["choices"][0]['message']}
 
         Summary:
-        {rand_sum}
+        {rand_sum["choices"][0]['message']}
 
-        Experience: {rand_work_exp}
+        Experience: {rand_work_exp["choices"][0]['message']}
 
         Education:
-        {rand_education}
+        {rand_education["choices"][0]['message']}
 
         Skills:
-        {rand_skills}
+        {rand_skills["choices"][0]['message']}
 
-        Achievements: {rand_achieve}
+        Achievements: {rand_achieve["choices"][0]['message']}
 
-        Projects: {rand_proj}
+        Projects: {rand_proj["choices"][0]['message']}
         """
 
         return resume_content
+    
+
+def generate_and_save_resumes():
+    for idx, name in enumerate(names[:1]):
+        resume_content = generate_resume()
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        pdf.multi_cell(0, 10, resume_content)
+        pdf.output(f"resume_{idx}.pdf")
+        print(f"Generated resume for {name}")
+
+generate_and_save_resumes()
     
