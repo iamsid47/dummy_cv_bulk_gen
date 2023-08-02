@@ -3,7 +3,7 @@ import json
 from fpdf import FPDF
 import time
 
-openai.api_key = "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"
+openai.api_key = "YOUR API"
 
 names = [
     "Abigail Smith", "Benjamin Brown", "Christopher Jones", "David Williams", "Emily Anderson",
